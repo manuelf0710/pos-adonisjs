@@ -1,0 +1,99 @@
+<div *ngIf="loading">
+    <!--<button type="button" class=" close" aria-label="Close" (click)="closeModal()">
+      <i class="fa fa-close text-darks"></i>
+    </button>--> 
+    <app-loading></app-loading>
+  </div> 
+  <form [formGroup]="formulario" novalidate  (ngSubmit)="guardar($event)">
+      <div class="modal-header ">
+        <h2 class="modal-title " id="modal-basic-title" >
+         <span *ngIf="!formulario.get('id').value"> Nuevo Cliente </span>
+         <span *ngIf="formulario.get('id').value"> Editar Cliente </span>
+        </h2>
+        <button type="button" class=" close" aria-label="Close" (click)="closeModal()">
+          <i class="fa fa-close"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-th"></i></span>
+                    </div>
+                    <input type="text" class="form-control form-control-sm" formControlName="nombre" placeholder="Nombre">
+                </div>
+                <div *ngIf="formulario.get('nombre').errors && formulario.get('nombre').touched">
+                    <small *ngIf="formulario.get('nombre').hasError('required')" class="form-text text-danger">el campo nombre no debe estar vacío.</small>
+                </div>                
+        </div>
+        <input type="hidden" id="id" formControlName="id" >
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-code"></i></span>
+                </div>
+                <input [readonly]="loading || formulario.get('id').value " type="number" class="form-control form-control-sm" placeholder="Documento" formControlName="documento" maxlength="20"  >
+            </div>
+            <div *ngIf="formulario.get('documento').errors && formulario.get('documento').touched">
+                <small *ngIf="formulario.get('documento').hasError('required')" class="form-text text-danger">el campo documento no debe estar vacío.</small>
+            </div>             
+        </div>  
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-product-hunt"></i></span>
+                </div>
+                <input [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Email" formControlName="email" >
+            </div>           
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-phone"></i></span>
+                </div>
+                <input [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Teléfono" formControlName="telefono" >
+            </div>
+            <div *ngIf="formulario.get('telefono').errors && formulario.get('telefono').touched">
+                <small *ngIf="formulario.get('telefono').hasError('required')" class="form-text text-danger">el campo teléfono no debe estar vacío.</small>
+            </div>            
+        </div>             
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <div class="">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-address-card-o"></i></span>
+                            </div>
+                            <textarea [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Dirección" formControlName="direccion" maxlength="120"  ></textarea>
+                        </div>                    
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-6">
+                <div class="form-group">
+                    <div class="input-group">
+                        
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-th"></i></span>
+                        </div>
+                        <input  (dateSelect)="dateSeleccionado($event)" placeholder="Fecha de Nacimiento"
+                        name="dp" formControlName="fecha_nacimiento" ngbDatepicker #d="ngbDatepicker"  class="fz-11 rounded float-right form-control" readonly>
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fa fa-calendar" (click)="d.toggle()"></i></span>
+                        </div>               
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      </div>
+
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" (click)="closeModal()" > Salir </button>
+        <button type="submit" class="btn btn-primary" [disabled]="formulario.invalid || loading"> Guardar </button>
+      </div>
+  </form>	 

@@ -1,0 +1,4 @@
+<form [formGroup]="formulario" novalidate  (ngSubmit)="consultar($event)">
+    <i class="fa fa-barcode fa-3x pull-right"></i>
+    <input  formControlName="barras" type="text" placeholder="Lector De Códigos de barras" class="form-control form-control-sm" aria-label="Small" aria-describedby="inputGroup-sizing-sm" >
+</form>

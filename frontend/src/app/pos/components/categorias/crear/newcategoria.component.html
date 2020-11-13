@@ -1,0 +1,38 @@
+<div *ngIf="loading">
+  <!--<button type="button" class=" close" aria-label="Close" (click)="closeModal()">
+    <i class="fa fa-close text-darks"></i>
+  </button>--> 
+  <app-loading></app-loading>
+</div>
+<form [formGroup]="formulario" novalidate  (ngSubmit)="guardar($event)">
+    <div class="modal-header ">
+      <h3 class="modal-title " id="modal-basic-title" >
+       <span *ngIf="!formulario.get('id').value"> Nueva Categoría </span>
+       <span *ngIf="formulario.get('id').value"> Editar Categoría </span>
+      </h3>
+      <button type="button" class=" close" aria-label="Close" (click)="closeModal()">
+        <i class="fa fa-close"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="id" formControlName="id" >
+            <div class="form-group">
+              <label for="exampleInputEmail1">Categoría</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-th"></i></span>
+                </div>
+                <input [readonly]="loading" type="text" class="form-control form-control-xs" placeholder="Ingrese la Categoria" formControlName="nombre" maxlength="100"  >
+              </div>
+                <div *ngIf="formulario.get('nombre').errors && formulario.get('nombre').touched">
+                    <small *ngIf="formulario.get('nombre').hasError('required')" class="form-text text-danger">el campo categoría no debe estar vacío.</small>
+                    <small *ngIf="formulario.get('nombre').hasError('maxlength')" class="form-text text-danger">el campo categoría no puede ser mayor de 100 caracteres.</small>
+                </div>
+                <!--{{formulario.get('nombre').value.length}}/100-->
+              </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-dark" (click)="closeModal()" > Salir </button>
+      <button type="submit" class="btn btn-primary" [disabled]="formulario.invalid || loading"> Guardar </button>
+    </div>
+</form>    

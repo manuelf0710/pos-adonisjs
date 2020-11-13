@@ -1,0 +1,124 @@
+<app-loading *ngIf="loadinginicio || loading"></app-loading>
+<form  [formGroup]="formulario" novalidate  (ngSubmit)="guardar($event)" *ngIf="!loadinginicio">
+<input type="hidden" id="id" formControlName="id" >
+<div class="row">
+    <div class="col-md-6 col-12 mb-3">
+        <div class="card h-100">
+            <div class="card-body border-top-success pt-3">
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="fecha" class="font-weight-bold">Fecha</label>
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend" placement="top" ngbTooltip="fecha">
+                            <span class="input-group-text"><i class="fa fa-th"></i></span>
+                            </div>
+                            <input  ngbDatepicker #d="ngbDatepicker" readonly type="text" class="form-control form-control-xs" placeholder="Ingrese la fecha" formControlName="fecha" maxlength="100"  >
+                            <div class="input-group-append" (click)="d.toggle()" placement="top" ngbTooltip="Seleccionar fecha">
+                                <span class="input-group-text"><i   class="fa fa-calendar"  ></i></span>
+                            </div>
+                        </div>
+                            <div *ngIf="formulario.get('fecha').errors && formulario.get('fecha').touched">
+                                <small *ngIf="formulario.get('fecha').hasError('required')" class="form-text text-danger">el campo fecha no debe estar vacío.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="razon_id" class="font-weight-bold">Razón</label>
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend" placement="top" ngbTooltip="Razón">
+                            <span class="input-group-text"><i class="fa fa-th"></i></span>
+                            </div>
+                            <select name="razon_id" id="razon_id" class="form-control form-control-sm" formControlName="razon_id">
+                                <option [value]="r.id" *ngFor="let r of razones">{{r.nombre}}</option>
+                            </select>
+                        </div>
+                            <div *ngIf="formulario.get('razon_id').errors && formulario.get('razon_id').touched">
+                                <small *ngIf="formulario.get('razon_id').hasError('required')" class="form-text text-danger">el campo razón no debe estar vacío.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="almacen_id" class="font-weight-bold">Almacén</label>
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend" placement="top" ngbTooltip="Razón">
+                            <span class="input-group-text"><i class="fa fa-th"></i></span>
+                            </div>
+                                <select name="almacen_id" id="almacen_id" class="form-control form-control-sm" formControlName="almacen_id">
+                                    <option [value]="r.id" *ngFor="let r of almacenes">{{r.nombre}}</option>
+                                </select>
+                        </div>
+                            <div *ngIf="formulario.get('almacen_id').errors && formulario.get('almacen_id').touched">
+                                <small *ngIf="formulario.get('almacen_id').hasError('required')" class="form-text text-danger">el campo Almacén no debe estar vacío.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="proveedor_id" class="font-weight-bold">Proveedor</label>
+                        <div class="input-groupp input-group-smp">
+                            <app-autocomplete [url]="urlCompletProveedor" [lengthSize]="2" (seleccionado)="proveedorSeleccionado($event)"></app-autocomplete>
+                        </div>
+                            <div *ngIf="formulario.get('proveedor_id').errors && formulario.get('proveedor_id').touched">
+                                <small *ngIf="formulario.get('proveedor_id').hasError('required')" class="form-text text-danger">el campo Proveedor no debe estar vacío.</small>
+                            </div>
+                        </div>
+                    </div>                    
+                    <div class="col-md-12 col-12">
+                        <table class="table table-sm table-striped table-hover fz-13">
+                            <thead class="thead-light">
+                                <tr align="center">
+                                    <th></th>
+                                    <th>Artículo</th>
+                                    <th width="100">Cant.</th>
+                                    <th>Precio Compra</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let art of ventaDetalles.productosVenta; let index=index; let odd=odd; let even=even" [ngClass]="{ odd: odd, even:even}">
+                                    <td><button class="btn btn-sm btn-danger" (click)="removeItem(art)"><i class="fa fa-close"></i></button></td>
+                                    <td>{{art.descripcion}}</td>
+                                    <td align="right">
+                                        <input type="number" [value]="art.cantidad" (change)="verificarCantidad(art, $event.target.value); " class="form-control form-control-sm text-center font-weight-bold border-dashed" min="1" max="{{art.stock}}">
+
+                                    </td>
+                                    <td>${{art.precio_compra | number}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-light" (click)="editarProducto(art)">
+                                            <i class="fa fa-pencil fz-13"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+  
+                </div>
+             </div>
+            </div>
+        </div>
+    <div class="col-md-6 col-12 card border-top-warning pt-3">
+        <ul ngbNav #nav="ngbNav" [(activeId)]="active" [destroyOnHide]='false' class="nav-tabs">
+            <li [ngbNavItem]="1">
+                <a ngbNavLink>Productos</a>
+                <ng-template ngbNavContent>
+                <app-bgtable [tableConfig]="tableConfig"
+                [pkey]="'id'"
+                (copiarAction)="copiar($event)"
+                    ></app-bgtable>                    
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="2" >
+                <a ngbNavLink>tab 2</a>
+                <ng-template ngbNavContent>
+                second table
+                </ng-template>
+            </li>
+        </ul>
+        <div [ngbNavOutlet]="nav" class="mt-2">div algo</div>
+    </div>
+</div>
+</form>

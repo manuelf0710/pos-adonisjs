@@ -1,0 +1,9 @@
+.btn-sm {
+    padding: .20rem .20rem;
+    font-size: .875rem;
+    line-height: 1;
+    border-radius: .2rem;
+}
+.card-body{
+    padding:.25rem;
+}

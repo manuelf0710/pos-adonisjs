@@ -1,0 +1,46 @@
+<div *ngIf="loading">
+    <!--<button type="button" class=" close" aria-label="Close" (click)="closeModal()">
+      <i class="fa fa-close text-darks"></i>
+    </button>--> 
+    <app-loading></app-loading>
+  </div>
+  <form [formGroup]="formulario" novalidate  (ngSubmit)="guardar($event)">
+      <div class="modal-header ">
+        <h3 class="modal-title " id="modal-basic-title" >
+         <span *ngIf="!formulario.get('id').value"> Nuevo Impuesto </span>
+         <span *ngIf="formulario.get('id').value"> Editar Impuesto </span>
+        </h3>
+        <button type="button" class=" close" aria-label="Close" (click)="closeModal()">
+          <i class="fa fa-close"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="id" formControlName="id" >
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend" placement="top" ngbTooltip="nombre">
+                    <span class="input-group-text"><i class="fa fa-th"></i></span>
+                  </div>
+                  <input [readonly]="loading" type="text" class="form-control form-control-xs" placeholder="Ingrese el nombre" formControlName="nombre" maxlength="100"  >
+                </div>
+                  <div *ngIf="formulario.get('nombre').errors && formulario.get('nombre').touched">
+                      <small *ngIf="formulario.get('nombre').hasError('required')" class="form-text text-danger">el campo nombre no debe estar vacío.</small>
+                  </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-prepend" placement="top" ngbTooltip="valor">
+                        <span class="input-group-text"><i class="fa fa-dollar"></i></span>
+                      </div>
+                      <input [readonly]="loading" type="number" class="form-control form-control-xs" placeholder="Ingrese el valor" formControlName="valor" maxlength="100"  >
+                    </div>
+                      <div *ngIf="formulario.get('valor').errors && formulario.get('valor').touched">
+                          <small *ngIf="formulario.get('valor').hasError('required')" class="form-text text-danger">el campo valor no debe estar vacío.</small>
+                      </div>
+                    </div>                
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" (click)="closeModal()" > Salir </button>
+        <button type="submit" class="btn btn-primary" [disabled]="formulario.invalid || loading"> Guardar </button>
+      </div>
+  </form>    

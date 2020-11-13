@@ -1,0 +1,36 @@
+<!--<div class="row">    
+    <div class="col-md-12">
+        <button placement="left" ngbTooltip="Nuevo Cliente" class="float-right btn btn-primary btn-sm mb-2" (click)="agregar();"><i class="fa fa-plus-circle" ></i> Agregar cliente</button>
+    </div>
+</div>-->
+<app-bgtable [tableConfig]="tableConfig" (nuevoAction)="agregar($event)"  (editarAction)="editar($event)" (copiarAction)="copiar($event)" (eliminarAction)="eliminar($event)" (exportarAction)="exportar($event)" (dataSourceExport)="generarView($event)" >   
+</app-bgtable>
+<!--
+<app-bgtable [tableConfig]="tableConfig" (editarAction)="editar($event)" (copiarAction)="copiar($event)" (eliminarAction)="eliminar($event)" (exportarAction)="exportar($event)" [template]="testTemplate" (dataSourceExport)="generarView($event)" >   
+</app-bgtable>
+
+<ng-template [ngTemplateOutlet]=""  [ngOutletContext]="" #testTemplate let-dataSource>
+    <div class="card-deck">
+        <div class="col-md-3 col-lg-3 col-xs-12 col-sm-12 mb-4" *ngFor="let item of listItem"  >
+            <div class="card font-weight-bold h-100 card-bgtable">
+                <i class="fa fa-user-circle-o text-center fa-4x mt-1"></i>
+                <div class="card-body h-100">
+                  <p class="text-center">{{item.nombre}}</p>
+                  <p class="card-text" *ngIf="item.documento">Cédula: {{item.documento}}</p>
+                  <p class="card-text" *ngIf="item.direccion">Dirección: {{item.direccion}}</p>
+                  <p class="card-text" *ngIf="item.telefono">Telefono: {{item.telefono}}</p>
+                  <p class="card-text" *ngIf="item.email">Email: {{item.email}}</p>
+                  <div style="clear: both;"><br></div>
+                  <div class="mb-2 mt-4 text-center" style="bottom:0; position:absolute">
+                        <button (click)="editar(item)" type="button" class="btn btn-outline-secondary btn-sm" placement="top" ngbTooltip="editar"><i class="fa fa-pencil"></i></button>
+                        <button (click)="eliminar(item)" type="button" class="btn btn-outline-secondary btn-sm" placement="top" ngbTooltip="eliminar"><i class="fa fa-close"></i></button>
+                        <button (click)="copiar(item)" type="button" class="btn btn-outline-secondary btn-sm" placement="top" ngbTooltip="copiar"><i class="fa fa-clone"></i></button>
+                        <button (click)="eliminarRow(item)" type="button" class="btn btn-outline-secondary btn-sm">Eliminar</button>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </div>
+</ng-template>-->
+
+

@@ -1,0 +1,85 @@
+<div class="row">
+    <div class=" col-lg-5 col-xs-12 col-12 ">
+        <div class="card h-100">
+            <div class="card-body border-top-success">
+              <div class="row">
+                 <div class="col-12 text-center mb-2">
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" [disabled]="!ventaDetalles.productosVenta.length" [ngClass]="{'btn-primary': ventaDetalles.productosVenta.length, 'btn-outline-primary': !ventaDetalles.productosVenta.length }"  class="btn" (click)="pago()"><i class="fa fa-money"></i> Pago </button>
+                    <button type="button" [ngClass]="{'btn-secondary': ventaDetalles.productosVenta.length, 'btn-outline-secondary': !ventaDetalles.productosVenta.length }" class="btn" (click)="nuevoRecibo()"><i class="fa fa-plus-circle"></i> Nuevo </button>
+                    <button type="button"  [ngClass]="{'btn-danger': ventaDetalles.productosVenta.length, 'btn-outline-danger': !ventaDetalles.productosVenta.length }" class="btn" (click)="eliminarRecibo()" [disabled]="!ventaDetalles.productosVenta.length"><i class="fa fa-close"></i> Eliminar</button>
+                      <div ngbDropdown class="d-inline-block">
+                        <button  [disabled]="!listaRecibos.length" [ngClass]="{'btn-success': listaRecibos.length, 'btn-outline-success': !listaRecibos.length }" class="btn" id="dropdownBasic1" ngbDropdownToggle><i class="fa fa-list-ol"></i>Lista<span *ngIf="listaRecibos.length"> ({{listaRecibos.length}})</span></button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                          <button *ngFor="let item of listaRecibos; ngForTrackByField let index=index;"  ngbDropdownItem   (click)="volver(item)">({{item.posicion}}) {{ item.tiempo}}</button>
+                          
+                        </div>
+                      </div>
+                  </div>
+              </div>            
+            </div>   
+              <div class="alert alert-danger text-center fa-2x font-weight-bold">
+                ${{ventaDetalles.total | number:'1.0-0' }}
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <label for="">Cliente</label>
+                  <app-autocomplete [url]="urlCompleteClientes" (seleccionado)="clienteSeleccionado($event)"></app-autocomplete>
+                  <input type="hidden">
+                </div>
+              </div>
+                <table class="table table-sm table-striped fz-12">
+                    <thead>
+                      <tr>
+                        <th >#</th>
+                        <th >Productos <span  placement="top" ngbTooltip="Cantidad Productos">({{ventaDetalles.productosVenta.length}})</span> <span placement="top" ngbTooltip="Cantidad Articulos"> CA ({{ventaDetalles.totalItems}})</span></th>
+                        <th >Precio</th>
+                        <th width="80">Cant</th>
+                        <th >Valor</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of ventaDetalles.productosVenta; let index=index; let odd=odd; let even=even" [ngClass]="{ odd: odd, even:even}">
+                        <td>
+                            <button class="btn btn-sm btn-danger" (click)="removeItem(item)"><i class="fa fa-close"></i></button>
+                        </td>
+                        <td>{{item.descripcion}}</td>
+                        <td>${{item.precio_venta | number:'1.0-0'}}</td>
+                        <td><input type="number" [value]="item.cantidad" [(ngModel)]="item.cantidad" (change)="verificarCantidad(item); " class="form-control form-control-sm text-center font-weight-bold border-dashed" min="1" max="{{item.stock}}">
+                          <!--  -->
+                        </td>
+                        <td>${{item.cantidad * item.precio_venta | number:'1.0-0' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+            <div class="card-footer">
+              <div class="alert alert-danger text-center fa-2x font-weight-bold" *ngIf="ventaDetalles.productosVenta.length">
+                 ${{ventaDetalles.total | number:'1.0-0' }}
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7 col-xs-12 col-12">
+        <div class="col-md-12 col-12 card border-top-warning pt-3">
+            <ul ngbNav #nav="ngbNav" [(activeId)]="active" [destroyOnHide]='false' class="nav-tabs">
+                <li [ngbNavItem]="1">
+                    <a ngbNavLink>Código de Barras <i class="fa fa-barcode"></i></a>
+                    <ng-template ngbNavContent>
+                      <app-barcode (copiarAction)="copiar($event)"></app-barcode>
+                    </ng-template>
+                </li>
+                <li [ngbNavItem]="2" >
+                    <a ngbNavLink>Buscar Productos <i class="fa fa-product-hunt"></i></a>
+                    <ng-template ngbNavContent>
+                      <app-bgtable [tableConfig]="tableConfig"
+                                   (copiarAction)="copiar($event)" class="fz-12">
+                      </app-bgtable>
+                    </ng-template>
+                </li>
+            </ul>
+            <div [ngbNavOutlet]="nav" class="mt-2" style="min-height:300px;">div algo</div>
+        </div>        
+
+    </div>
+</div>

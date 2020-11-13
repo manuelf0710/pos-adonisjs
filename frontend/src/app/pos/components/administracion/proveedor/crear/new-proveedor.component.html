@@ -1,0 +1,189 @@
+<div *ngIf="loading">
+    <app-loading></app-loading>
+ </div>
+<form [formGroup]="formulario" novalidate  (ngSubmit)="guardar($event)">
+    <div class="modal-header ">
+    <h3 class="modal-title " id="modal-basic-title" >
+        <span *ngIf="!formulario.get('id').value"> Nuevo Proveedor </span>
+        <span *ngIf="formulario.get('id').value"> Editar Proveedor </span>
+    </h3>
+    <button type="button" class=" close" aria-label="Close" (click)="closeModal()">
+        <i class="fa fa-close"></i>
+    </button>
+    </div>
+    <div class="modal-body">
+       <div class="text-info fz-11 text-right">
+        los campos marcados con <i class="fa fa-asterisk text-danger"></i> son obligatorios
+       </div>
+        
+    <input type="hidden" id="id" formControlName="id" >
+    <div class="row">
+        <div class="col-md-6 col-lg-4 col-12">
+            <div class="form-group">
+                <label for="tipo_identidad" class="fz-11">Tipo Identificación <span class="text-danger"><i class="fa fa-asterisk"></i></span></label>
+                <select name="tipo_identidad" id="tipo_identidad" class="form-control form-control-sm" placeholder="Tipo de Identificación" formControlName="tipo_identidad">
+                    <option [value]="1">CC</option>
+                    <option [value]="2">Nit</option>
+                </select>
+                <div *ngIf="formulario.get('tipo_identidad').errors && formulario.get('tipo_identidad').touched">
+                    <small *ngIf="formulario.get('tipo_identidad').hasError('required')" class="form-text text-danger">el campo tipo identificación no debe estar vacío.</small>
+                </div>                
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 col-12">
+            <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-8 col-lg-8 col-8">
+                            <div class="form-group">
+                                <label for="registro" class="fz-11">Registro/Cédula <span class="text-danger"><i class="fa fa-asterisk"></i></span></label>
+                                <input [readonly]="loading" type="number" class="form-control form-control-sm" placeholder="Cédula/registro" formControlName="registro">
+                                <div *ngIf="formulario.get('registro').errors && formulario.get('registro').touched">
+                                    <small *ngIf="formulario.get('registro').hasError('required')" class="form-text text-danger">el campo cédula/registro no debe estar vacío.</small>
+                                </div>                
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-4 col-lg-4 col-4">
+                            <div class="form-group">
+                                <label for="digito" class="fz-11">Dígito Verificación</label>
+                                <input [readonly]="loading" type="number" class="form-control form-control-sm" placeholder="dígito" formControlName="digito">               
+                            </div>
+                        </div>
+                    </div>
+                
+
+            </div>            
+        </div>
+        <div class="col-md-6 col-lg-4 col-12">
+
+
+
+            <div class="form-group">
+                <label for="digito" class="fz-11">Tipo Persona <span class="text-danger"><i class="fa fa-asterisk"></i></span></label>
+                <select name="tipo_persona" id="tipo_persona" class="form-control form-control-sm" placeholder="Tipo de Persona" formControlName="tipo_persona">
+                    <option [value]="1">Persona Natural</option>
+                    <option [value]="2">Persona Jurídica</option>
+                </select>
+                <div *ngIf="formulario.get('tipo_persona').errors && formulario.get('tipo_persona').touched">
+                    <small *ngIf="formulario.get('tipo_persona').hasError('required')" class="form-text text-danger">el campo tipo persona no debe estar vacío.</small>
+                </div>                              
+            </div>
+
+        </div>
+        <div class="col-md-6 col-lg-4 col-12">
+            <div class="form-group">
+                <label for="digito" class="fz-11">Nombre <span class="text-danger"><i class="fa fa-asterisk"></i></span></label>
+                <input [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Nombre" formControlName="nombre"> 
+                <div *ngIf="formulario.get('nombre').errors && formulario.get('nombre').touched">
+                    <small *ngIf="formulario.get('nombre').hasError('required')" class="form-text text-danger">el campo nombre no debe estar vacío.</small>
+                </div>                              
+            </div>            
+        </div>
+        <div class="col-md-6 col-lg-4 col-12">
+            <div class="form-group">
+                <label for="tel" class="fz-11">Teléfono</label>
+                <input name="tel" id="tel" [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Teléfono" formControlName="tel"> 
+            </div>            
+        </div>
+        <div class="col-md-6 col-lg-4 col-12">
+            <div class="form-group">
+                <label for="web" class="fz-11">Web</label>
+                <input [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Web" formControlName="web"> 
+            </div>            
+        </div>
+        <div class="col-md-6 col-lg-4 col-12">
+            <div class="form-group">
+                <label for="web" class="fz-11">Correo</label>
+                <input [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Correo" formControlName="correo"> 
+            </div>             
+        </div>
+        <div class="col-md-6 col-lg-4 col-12">
+            <div class="form-group">
+                <label for="regimen" class="fz-11">Régimen</label>
+                <select name="regimen" id="regimen" class="form-control form-control-sm" placeholder="Regimen" formControlName="regimen">
+                    <option [value]="reg.id" *ngFor="let reg of regimenes">{{reg.nombre}}</option>
+                </select>
+            </div>
+        </div>        
+        <div class="col-md-6 col-lg-4 col-12">
+            <div class="form-group">
+                <label for="autoretenedor" class="fz-11">Autoretenedor</label>
+                <select name="autoretenedor" id="autoretenedor" class="form-control form-control-sm" placeholder="Autoretenedor" formControlName="autoretenedor">
+                    <option [value]="1" >Si</option>
+                    <option [value]="2" >No</option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="col-md-6 col-lg-4 col-12">
+            <div class="form-group">
+                <label for="gcontrib" class="fz-11">Gran contribuyente</label>
+                <select name="gcontrib" id="gcontrib" class="form-control form-control-sm" placeholder="Gran contribuyente" formControlName="gcontrib">
+                    <option [value]="1" >Si</option>
+                    <option [value]="2" >No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 col-12">
+            <div class="form-group">
+                <label for="ica" class="fz-11">Ica</label>
+                <select name="ica" id="ica" class="form-control form-control-sm" placeholder="Autoretenedor" formControlName="ica">
+                    <option [value]="1" >Si</option>
+                    <option [value]="2" >No</option>
+                </select>
+            </div>
+        </div>        
+    </div>
+    <div class="row bg-light">
+       <div class="col-12 text-center">
+            <h3>Datos de Contacto</h3>
+       </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-lg-4 col-12">
+            <div class="form-group">
+                <label for="cont1" class="fz-11">Contacto 1</label>
+                <input name="cont1" id="cont1" [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Contacto 1" formControlName="cont1"> 
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12">
+            <div class="form-group">
+                <label for="tel1" class="fz-11">Teléfono 1</label>
+                <input name="tel1" id="tel1" [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Teléfono 1" formControlName="tel1"> 
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12">
+            <div class="form-group">
+                <label for="cargo1" class="fz-11">Cargo 1</label>
+                <input name="cargo1" id="cargo1" [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Cargo 1" formControlName="cargo1"> 
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12">
+            <div class="form-group">
+                <label for="cont2" class="fz-11">Contacto 2</label>
+                <input name="cont2" id="cont2" [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Contacto 2" formControlName="cont2"> 
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12">
+            <div class="form-group">
+                <label for="tel2" class="fz-11">Teléfono 2</label>
+                <input name="tel2" id="tel2" [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Teléfono 2" formControlName="tel2"> 
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4 col-12">
+            <div class="form-group">
+                <label for="cargo2" class="fz-11">Cargo 2</label>
+                <input name="cargo2" id="cargo2" [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Cargo 2" formControlName="cargo2"> 
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-dark" (click)="closeModal()" > Salir </button>
+    <button type="submit" class="btn btn-primary" [disabled]="formulario.invalid || loading"> Guardar </button>
+    </div>
+</form>    

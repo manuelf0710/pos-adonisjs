@@ -1,0 +1,275 @@
+<div *ngIf="loading">
+    <!--<button type="button" class=" close" aria-label="Close" (click)="closeModal()">
+      <i class="fa fa-close text-darks"></i>
+    </button>--> 
+    <app-loading *ngIf="loading"></app-loading>
+  </div>  
+    <form [formGroup]="formulario" novalidate  (ngSubmit)="guardar($event)">
+      <div class="modal-header ">
+        <h3 class="modal-title " id="modal-basic-title" >
+         <span *ngIf="!formulario.get('id').value"> Nuevo Producto </span>
+         <span *ngIf="formulario.get('id').value"> Editar Producto </span>
+        </h3>
+        <button type="button" class=" close" aria-label="Close" (click)="closeModal()">
+          <i class="fa fa-close"></i>
+        </button>
+      </div>
+      <div class="modal-body" style="min-height: 380px;">
+        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+            <li [ngbNavItem]="1">
+              <a ngbNavLink>General</a>
+              <ng-template ngbNavContent>
+                <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend" placement="top" ngbTooltip="Categoría">
+                            <span class="input-group-text"><i class="fa fa-th"></i></span>
+                            </div>
+                            <select name="categoria_id" id="categoria_id" class="form-control form-control-sm" formControlName="categoria_id" placeholder="Seleccione...">
+                                <option [value]="item.id" *ngFor="let item of categorias">{{item.nombre}}</option>
+                            </select>                    
+                        </div>
+                        <div *ngIf="formulario.get('categoria_id').errors && formulario.get('categoria_id').touched">
+                            <small *ngIf="formulario.get('categoria_id').hasError('required')" class="form-text text-danger">el campo categoría no debe estar vacío.</small>
+                        </div>                
+                </div>
+                <input type="hidden" id="id" formControlName="id" >
+                    <!--
+                    <div class="form-group">
+                    <label for="exampleInputEmail1">Producto</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-th"></i></span>
+                        </div>
+                        <input [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Ingrese la Categoria" formControlName="categoria_id" maxlength="100"  >
+                    </div>
+                        <div *ngIf="formulario.get('categoria_id').errors && formulario.get('categoria_id').touched">
+                            <small *ngIf="formulario.get('categoria_id').hasError('required')" class="form-text text-danger">el campo categoría no debe estar vacío.</small>
+                        </div>
+                    </div>-->
+                    <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend" placement="top" ngbTooltip="Código Referencia">
+                        <span class="input-group-text"><i class="fa fa-code"></i></span>
+                        </div>
+                        <input [readonly]="loading || formulario.get('id').value " type="text" class="form-control form-control-sm" placeholder="Codigo Referencia" formControlName="codigo" maxlength="100"  >                         
+                    </div>  
+                    <div *ngIf="formulario.get('codigo').errors && formulario.get('codigo').touched">
+                        <small *ngIf="formulario.get('codigo').hasError('required')" class="form-text text-danger">el campo codigo no debe estar vacío.</small>
+                    </div>                    
+                    </div>
+                    <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend" placement="top" ngbTooltip="Código Barras">
+                        <span class="input-group-text"><i class="fa fa-barcode"></i></span>
+                        </div>
+                        <input [readonly]="loading || formulario.get('id').value " type="text" class="form-control form-control-sm" placeholder="Codigo Barras" formControlName="barras" maxlength="100"  >                         
+                    </div>  
+                    <div *ngIf="formulario.get('codigo').errors && formulario.get('codigo').touched">
+                        <small *ngIf="formulario.get('codigo').hasError('required')" class="form-text text-danger">el campo codigo no debe estar vacío.</small>
+                    </div>                    
+                    </div>                      
+                    <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend" placement="top" ngbTooltip="Descripción">
+                        <span class="input-group-text"><i class="fa fa-product-hunt"></i></span>
+                        </div>
+                        <input [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Ingrese la descripción" formControlName="descripcion" >
+                    </div>
+                        <div *ngIf="formulario.get('descripcion').errors && formulario.get('descripcion').touched">
+                            <small *ngIf="formulario.get('descripcion').hasError('required')" class="form-text text-danger">el campo descripción no debe estar vacío.</small>
+                        </div>            
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend" placement="top" ngbTooltip="Stock">
+                            <span class="input-group-text"><i class="fa fa-check"></i></span>
+                            </div>
+                            <input [readonly]="loading" type="number" class="form-control form-control-sm" placeholder="stock" formControlName="stock" >
+                        </div>
+                            <div *ngIf="formulario.get('stock').errors && formulario.get('stock').touched">
+                                <small *ngIf="formulario.get('stock').hasError('required')" class="form-text text-danger">el campo descripción no debe estar vacío.</small>
+                            </div>            
+                    </div>             
+                    <div class="row">
+                    <div class="form-group col-lg-6 col-md-6">
+                        <div class="">
+                            <div class="input-group">
+                                <div class="input-group-prepend" placement="top" ngbTooltip="Precio Compra">
+                                <span class="input-group-text"><i class="fa fa-dollar"></i></span>
+                                </div>
+                                <input  (change)="calculoPorPrecios()" [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Precio Compra" formControlName="precio_compra" maxlength="100"  >
+                            </div>
+                            <small class="text-right">$ {{formulario.get('precio_compra').value | number}}</small>
+                        </div>
+                        
+                    </div>           
+                    <div class="form-group col-lg-6 col-md-6">
+                        <div class="">
+                            <div class="input-group">
+                                <div class="input-group-prepend" placement="top" ngbTooltip="Precio Venta">
+                                <span class="input-group-text"><i class="fa fa-dollar"></i></span>
+                                </div>
+                                <input currencyMask   (change)="calculoPorPrecios()" [readonly]="loading" type="text" class="form-control form-control-sm" placeholder="Precio Venta" formControlName="precio_venta" maxlength="100"  >
+                            </div>
+                            <small class="text-right">$ {{formulario.get('precio_venta').value | number}}</small>                    
+                        </div>                
+                    </div>
+                </div>
+
+                <!---->
+                <div class="row">
+                    <div class="form-group col-lg-6 col-md-6">
+                        <div class="">
+                            <div class="input-group">
+                                <div class="input-group-prepend" placement="top" ngbTooltip="Impuesto">
+                                <span class="input-group-text"><i class="fa fa-th"></i></span>
+                                </div>
+                                <select (change)="calcularPrecioConImpuesto()" name="impuesto_id" id="impuesto_id" class="form-control form-control-sm" formControlName="impuesto_id" placeholder="Seleccione...">
+                                    <option [value]="impuesto.id" *ngFor="let impuesto of impuestos">{{impuesto.nombre + ' ('+  impuesto.valor+')'}} %</option>
+                                </select>
+                            </div>
+                            <div *ngIf="formulario.get('impuesto_id').errors && formulario.get('impuesto_id').touched">
+                                <small *ngIf="formulario.get('impuesto_id').hasError('required')" class="form-text text-danger">el campo impuesto no debe estar vacío.</small>
+                            </div>                            
+                        </div>
+                        
+                    </div>
+                    <div class="form-group col-lg-6 col-md-6">
+                        <div class="">
+                            <div class="input-group">
+                                <div class="input-group-prepend" placement="top" ngbTooltip="Precio Venta + impuesto">
+                                <span class="input-group-text"><i class="fa fa-plus-circle"></i></span>
+                                </div>
+                                <input   type="text" class="form-control form-control-sm" placeholder="Precio Venta + impuesto" formControlName="precio_ventaimpuesto" maxlength="100" readonly >
+                            </div>
+                            <small class="text-right">$ {{formulario.get('precio_ventaimpuesto').value | number}}</small>                    
+                        </div>                
+                    </div>
+                </div>                
+                <!---->
+
+               
+                <div class="row">
+                    <div class="col-md-9 col-9"></div>
+                    <div class="form-group col-lg-3 col-md-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend" placement="top" ngbTooltip="Usar Porcentaje">
+                                <span class="input-group-text"><i class="fa fa-percent"></i></span>
+                                </div>
+                                <input (change)="calcularPorcentaje()" [readonly]="loading" type="number" class="form-control form-control-sm" placeholder="Porcentaje" formControlName="porcentaje">
+                            </div>                
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-8 offset-md-2">
+                        <!--<file-upload [url2]="'http://localhost/archivossubir2/'" [fk_key]="formulario.get('id').value" [autoupload]="false" (ArchivosCargados)="getArchivos($event)" [title]="'Agregar Imagen'" [document_type]="'productos'" [accept_files_extension]="['jpg','jpeg','png']"></file-upload>-->
+                        <file-upload [fk_key]="formulario.get('id').value" [autoupload]="false" (ArchivosCargados)="getArchivos($event)" [title]="'Agregar Imagen'" [document_type]="'productos'" [accept_files_extension]="['jpg','jpeg','png']"></file-upload>
+                    </div>
+                </div> 
+                <div class="form-group">
+                    <div class="col-md-8 offset-md-2"> 
+                        <div class="text-center" >
+                            <div class="text-center text-muted">Imágen Actual</div>
+                            <img [src]="api_url+'/'+formulario.get('imagen').value" alt="" width="200" *ngIf="formulario.get('imagen').value !=null && formulario.get('imagen').value !=''">                    
+                            <img [src]="api_url+'/uploads/productos/default/defaultproduct.png'" alt="" width="200" *ngIf="formulario.get('imagen').value == '' || formulario.get('imagen').value== null">
+                        </div>
+                    </div>
+                  </div>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="2" >
+              <a ngbNavLink>Lista Precios</a>
+              <ng-template ngbNavContent>
+                  <div class="alert alert-info text-right">
+                     <strong><span class="fa-2x"> Precio Venta sin Iva: </span> <span class="fa-2x">$ {{this.formulario.get('precio_venta').value | number}}</span>
+                        <br>
+                        <div class="mt-1"><span class="fa-2x"> Precio Compra: </span> <span class="fa-2x">$ {{this.formulario.get('precio_compra').value | number}}</span>
+                        </div>
+                    </strong>
+                  </div>
+                  <div class="row" *ngIf="!formulario.invalid">
+                    <div class="col-12 col-md-12 col-lg-12 text-right">
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-danger" (click)="agregarNuevoPrecio()" placement="top" ngbTooltip="Agregar Precio" ><i class="fa fa-plus-circle fa-2x"></i></button>
+                        </div>
+                    </div>
+                  </div>
+                  <table class="tabletable-striped table-sm" *ngIf="!formulario.invalid">
+                      <thead>
+                        <tr align="center">
+                            <th width="40"></th>
+                            <th>Nombre</th>
+                            <th width="100"><i class="fa fa-percent"></i>Descuento</th>
+                            <th width="140">Valor</th>
+                            <th></th>
+                            <th>Ganancia</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <tr >
+                              <td></td>
+                              <td>
+                                  <input type="text" class="form-control form-control-sm" formControlName="nombrenuevo">
+                              </td>
+                              <td>
+                                  <input type="number" class="form-control form-control-sm" (change)="calcularNuevoAgregarPorPorcentaje($event)" formControlName="porcentajenuevo">
+                              </td>
+                              <td>
+                                  <input type="number" class="form-control form-control-sm" (change)="calcularNuevoAgregarPorValor($event)" formControlName="valornuevo" >
+                              </td>
+                              <td>
+                                <div class="fa-2x"> $ {{formulario.get('valornuevo').value |  number}}</div>
+                             </td>
+                              <td>
+                                ${{formulario.get('ganancianuevo').value | number}}
+                              </td>
+                          </tr>
+                          <tr *ngFor="let item of productosPrecio;let index = index;">
+                            <td>
+                                <button type="button" class="btn btn-sm btn-danger" (click)="eliminarPrecio(item,index)">
+                                    <i class="fa fa-close"></i>
+                                </button>
+                                
+                            </td>
+                            <td>
+                                <input type="text" [value]="item.nombre"  (change)="cambiarNombrePrecioLista(item, $event)" class="form-control form-control-sm">
+                            </td>
+                            <td>
+                                <input size="6" type="number" min="0" [value]="item.porcentaje" (change)="calcularPrecioListaPorPorcentaje(item, $event)" class="form-control form-control-sm ">
+                            </td>
+                            <td>
+                                <input type="number"  (change)="calcularListaPrecioPorValor(item, $event)" [value]="item.valor" class="form-control form-control-sm" >
+                            </td>
+                            <td>
+                                <div class="fa-2x" [ngClass]="{'bg-danger': item.valor <=  formulario.get('precio_compra').value}"> $ {{item.valor |  number}}</div>
+                            </td>
+                            <td>
+                                $ {{item.ganancia | number}}
+                            </td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  <!--
+                  <div class="row">
+                    <div class="col-12 col-lg-12 col-md-12 text-right mt-5">
+                        <button type="button" class="btn btn-dark" (click)="closeModal()" > Salir </button>&nbsp;
+                        <button type="button" class="btn btn-primary" [disabled]="formulario.invalid || loading" (click)="guardarPrecioProducto()"> Guardar <i class="fa fa-money"></i> </button>
+                    </div>
+                  </div>-->
+              </ng-template>
+            </li>
+          </ul>
+          <div [ngbNavOutlet]="nav" class="mt-2">div algo</div>         
+      
+      </div>
+
+
+      <div class="modal-footer">
+        <div class="row">
+            <div class="col-12 col-lg-12 col-md-12 text-right">
+                <button type="button" class="btn btn-dark" (click)="closeModal()" > Salir </button>&nbsp;
+                <button type="submit" class="btn btn-primary" [disabled]="formulario.invalid || loading"> Guardar </button>
+            </div>
+          </div>
+      </div>
+  </form>    
